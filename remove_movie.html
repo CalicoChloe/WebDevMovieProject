@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Remove Movie</title>
+    <!-- Include Materialize CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Remove Movie</h1>
+        <form action="remove_movie.php" method="post">
+            <div class="input-field">
+                <input type="text" id="title" name="title" required>
+                <label for="title">Movie Title</label>
+            </div>
+            <div class="input-field">
+                <input type="number" id="release_year" name="release_year" required>
+                <label for="release_year">Release Year</label>
+            </div>
+            <button type="submit" class="btn waves-effect waves-light pink">Remove Movie</button>
+        </form>
+    </div>
+</body>
+</html>
+
