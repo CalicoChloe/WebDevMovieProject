@@ -44,20 +44,20 @@ $result = mysqli_query($conn, $sql);
 
                         // Retrieve director name
                         $director_id = $row['director_id'];
-                        $director_result = mysqli_query($conn, "SELECT name FROM directors WHERE id = '$director_id'");
-                        $director_name = mysqli_fetch_assoc($director_result)['name'];
+                        $director_result = mysqli_query($conn, "SELECT director_name FROM director WHERE director_id = '$director_id'");
+                        $director_name = mysqli_fetch_assoc($director_result)['director_name'];
                         echo "<td>".$director_name."</td>";
 
                         // Retrieve producer name
                         $producer_id = $row['producer_id'];
-                        $producer_result = mysqli_query($conn, "SELECT name FROM producers WHERE id = '$producer_id'");
-                        $producer_name = mysqli_fetch_assoc($producer_result)['name'];
+                        $producer_result = mysqli_query($conn, "SELECT producer_name FROM producer WHERE producer_id = '$producer_id'");
+                        $producer_name = mysqli_fetch_assoc($producer_result)['producer_name'];
                         echo "<td>".$producer_name."</td>";
 
                         // Retrieve writer name
                         $writer_id = $row['writer_id'];
-                        $writer_result = mysqli_query($conn, "SELECT name FROM writers WHERE id = '$writer_id'");
-                        $writer_name = mysqli_fetch_assoc($writer_result)['name'];
+                        $writer_result = mysqli_query($conn, "SELECT writer_name FROM writer WHERE writer_id = '$writer_id'");
+                        $writer_name = mysqli_fetch_assoc($writer_result)['writer_name'];
                         echo "<td>".$writer_name."</td>";
                         echo "</tr>";
                     }
