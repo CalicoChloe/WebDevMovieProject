@@ -11,6 +11,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $director_name = mysqli_real_escape_string($conn, $_POST['director']);
     $producer_name = mysqli_real_escape_string($conn, $_POST['producer']);
     $writer_name = mysqli_real_escape_string($conn, $_POST['writer']);
+    $actors = $_POST['actors']; // Assuming 'actors' is an array of actor names
 
     // Check if director exists, if not, insert into directors table
     $sql = "SELECT id FROM directors WHERE name = '$director_name'";
@@ -42,6 +43,24 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Insert movie record into film table with foreign key associations
     $sql = "INSERT INTO film (title, release_year, genre, director_id, producer_id, writer_id) VALUES ('$title', '$release_year', '$genre', '$director_id', '$producer_id', '$writer_id')";
     if (mysqli_query($conn, $sql)) {
+        // Retrieve the movie id
+        $movie_id = mysqli_insert_id($conn);
+
+        // Insert actors into actors table if they don't exist and associate them with the movie
+        foreach ($actors as $actor_name) {
+            $actor_name = mysqli_real_escape_string($conn, $actor_name);
+            $sql = "SELECT id FROM actors WHERE name = '$actor_name'";
+            $result = mysqli_query($conn, $sql);
+            if(mysqli_num_rows($result) == 0) {
+                mysqli_query($conn, "INSERT INTO actors (name) VALUES ('$actor_name')");
+            }
+            // Retrieve actor id
+            $actor_id = mysqli_fetch_assoc(mysqli_query($conn, "SELECT id FROM actors WHERE name = '$actor_name'"))['id'];
+
+            // Associate actor with the movie in the movie_actors table
+            mysqli_query($conn, "INSERT INTO movie_actors (movie_id, actor_id) VALUES ('$movie_id', '$actor_id')");
+        }
+
         echo "Movie added successfully.";
     } else {
         echo "Error: " . $sql . "<br>" . mysqli_error($conn);
