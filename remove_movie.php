@@ -33,19 +33,23 @@
             $release_year = mysqli_real_escape_string($conn, $_POST['release_year']);
 
             // Check if the movie exists in the database
-            $sql = "SELECT id FROM film WHERE title = '$title' AND release_year = '$release_year'";
+            $sql = "SELECT film_id FROM film WHERE title = '$title' AND release_year = '$release_year'";
             $result = mysqli_query($conn, $sql);
             if (mysqli_num_rows($result) > 0) {
-                $movie_id = mysqli_fetch_assoc($result)['id'];
-                // Delete the movie record from film table
-                $delete_film_sql = "DELETE FROM film WHERE id = '$movie_id'";
-                if (mysqli_query($conn, $delete_film_sql)) {
-                    // Delete associated records from movie_actors table
-                    $delete_actors_sql = "DELETE FROM movie_actors WHERE movie_id = '$movie_id'";
-                    mysqli_query($conn, $delete_actors_sql);
-                    echo "<p>Movie removed successfully.</p>";
+                $movie_id = mysqli_fetch_assoc($result)['film_id'];
+
+                // Delete associated records from movie_actor table
+                $delete_actors_sql = "DELETE FROM film_actor WHERE film_id = '$movie_id'";
+                if (mysqli_query($conn, $delete_actors_sql)) {
+                    // Delete the movie record from film table
+                    $delete_film_sql = "DELETE FROM film WHERE film_id = '$movie_id'";
+                    if (mysqli_query($conn, $delete_film_sql)) {
+                        echo "<p>Movie removed successfully.</p>";
+                    } else {
+                        echo "<p>Error removing movie: " . mysqli_error($conn) . "</p>";
+                    }
                 } else {
-                    echo "<p>Error removing movie: " . mysqli_error($conn) . "</p>";
+                    echo "<p>Error removing movie actors: " . mysqli_error($conn) . "</p>";
                 }
             } else {
                 echo "<p>Movie not found.</p>";

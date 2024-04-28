@@ -59,31 +59,31 @@
             $actors = array_map('trim', explode(',', $actors_input)); // Trim and split the string into an array
             
             // Check if director exists, if not, insert into directors table
-            $sql = "SELECT id FROM director WHERE name = '$director'";
+            $sql = "SELECT director_id FROM director WHERE director_name = '$director'";
             $result = mysqli_query($conn, $sql);
             if(mysqli_num_rows($result) == 0) {
-                mysqli_query($conn, "INSERT INTO director (name) VALUES ('$director')");
+                mysqli_query($conn, "INSERT INTO director (director_name) VALUES ('$director')");
             }
             // Retrieve director id
-            $director_id = mysqli_fetch_assoc(mysqli_query($conn, "SELECT id FROM director WHERE name = '$director'"))['id'];
+            $director_id = mysqli_fetch_assoc(mysqli_query($conn, "SELECT director_id FROM director WHERE director_name = '$director'"))['director_id'];
 
             // Check if producer exists, if not, insert into producers table
-            $sql = "SELECT id FROM producer WHERE name = '$producer'";
+            $sql = "SELECT producer_id FROM producer WHERE producer_name = '$producer'";
             $result = mysqli_query($conn, $sql);
             if(mysqli_num_rows($result) == 0) {
-                mysqli_query($conn, "INSERT INTO producer (name) VALUES ('$producer')");
+                mysqli_query($conn, "INSERT INTO producer (producer_name) VALUES ('$producer')");
             }
             // Retrieve producer id
-            $producer_id = mysqli_fetch_assoc(mysqli_query($conn, "SELECT id FROM producer WHERE name = '$producer'"))['id'];
+            $producer_id = mysqli_fetch_assoc(mysqli_query($conn, "SELECT producer_id FROM producer WHERE producer_name = '$producer'"))['producer_id'];
 
             // Check if writer exists, if not, insert into writers table
-            $sql = "SELECT id FROM writer WHERE name = '$writer'";
+            $sql = "SELECT writer_id FROM writer WHERE writer_name = '$writer'";
             $result = mysqli_query($conn, $sql);
             if(mysqli_num_rows($result) == 0) {
-                mysqli_query($conn, "INSERT INTO writer (name) VALUES ('$writer')");
+                mysqli_query($conn, "INSERT INTO writer (writer_name) VALUES ('$writer')");
             }
             // Retrieve writer id
-            $writer_id = mysqli_fetch_assoc(mysqli_query($conn, "SELECT id FROM writer WHERE name = '$writer'"))['id'];
+            $writer_id = mysqli_fetch_assoc(mysqli_query($conn, "SELECT writer_id FROM writer WHERE writer_name = '$writer'"))['writer_id'];
 
             // Insert movie record into film table with foreign key associations
             $sql = "INSERT INTO film (title, release_year, genre, director_id, producer_id, writer_id) VALUES ('$title', '$release_year', '$genre', '$director_id', '$producer_id', '$writer_id')";
@@ -94,16 +94,16 @@
                 // Insert actors into actor table if they don't exist and associate them with the movie
                 foreach ($actors as $actor_name) {
                     $actor_name = mysqli_real_escape_string($conn, $actor_name);
-                    $sql = "SELECT id FROM actor WHERE name = '$actor_name'";
+                    $sql = "SELECT actor_id FROM actor WHERE actor_name = '$actor_name'";
                     $result = mysqli_query($conn, $sql);
                     if(mysqli_num_rows($result) == 0) {
-                        mysqli_query($conn, "INSERT INTO actor (name) VALUES ('$actor_name')");
+                        mysqli_query($conn, "INSERT INTO actor (actor_name) VALUES ('$actor_name')");
                     }
                     // Retrieve actor id
-                    $actor_id = mysqli_fetch_assoc(mysqli_query($conn, "SELECT id FROM actor WHERE name = '$actor_name'"))['id'];
+                    $actor_id = mysqli_fetch_assoc(mysqli_query($conn, "SELECT actor_id FROM actor WHERE actor_name = '$actor_name'"))['actor_id'];
 
                     // Associate actor with the movie in the movie_actor table
-                    mysqli_query($conn, "INSERT INTO movie_actor (film_id, actor_id) VALUES ('$movie_id', '$actor_id')");
+                    mysqli_query($conn, "INSERT INTO film_actor (film_id, actor_id) VALUES ('$movie_id', '$actor_id')");
                 }
 
                 echo "Movie added successfully.";
